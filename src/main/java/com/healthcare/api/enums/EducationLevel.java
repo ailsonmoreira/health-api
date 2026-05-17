@@ -1,0 +1,13 @@
+package com.healthcare.api.enums;
+
+public enum EducationLevel {
+
+    NONE,
+    ELEMENTARY_INCOMPLETE,
+    ELEMENTARY_COMPLETE,
+    HIGH_SCHOOL_INCOMPLETE,
+    HIGH_SCHOOL_COMPLETE,
+    HIGHER_EDUCATION_INCOMPLETE,
+    HIGHER_EDUCATION_COMPLETE,
+    POSTGRADUATE
+}
