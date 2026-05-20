@@ -3,7 +3,17 @@ import com.healthcare.api.enums.EducationLevel;
 import com.healthcare.api.enums.Gender;
 import com.healthcare.api.enums.Race;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.time.LocalDate;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Person {
 
@@ -18,6 +28,8 @@ public class Person {
 
     @Column (unique = true)
     private String cns;
+
+    private LocalDate birthDate;
 
     @Enumerated (EnumType.STRING)
     private Gender gender;
@@ -34,8 +46,5 @@ public class Person {
     private Boolean alcoholUse;
     private Boolean heartDisease;
     private Boolean pregnant;
-
-    @ManyToOne
-    @JoinColumn(name = "residende_id")
-    private Residence residence;
+    private Boolean respiratoryDisease;
 }

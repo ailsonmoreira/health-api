@@ -1,6 +1,6 @@
 package com.healthcare.api.enums;
 
-public enum SeawageType {
+public enum SewageType {
     SEWAGE_SYSTEM,
     SEPTIC_TANK,
     RUDIMENTARY_PIT,

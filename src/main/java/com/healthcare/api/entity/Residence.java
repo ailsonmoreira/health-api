@@ -2,22 +2,30 @@ package com.healthcare.api.entity;
 
 import com.healthcare.api.enums.*;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 public class Residence {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne (cascade = CascadeType.ALL)
-    private Addres addres;
-
-    @ManyToOne
-    @JoinColumn(name = "micro_area_id")
-    private MicroArea microArea;
+    private String zipCode;
+    private String street;
+    private String number;
+    private String neighborhood;
+    private String city;
+    private String state;
+    private String complement;
+    private String referencePoint;
+    private Integer microArea;
 
     @Enumerated (EnumType.STRING)
     private LocationZone locationZone;
@@ -36,7 +44,7 @@ public class Residence {
     private WaterSupplyType waterSupply;
 
     @Enumerated (EnumType.STRING)
-    private SeawageType sewageType;
+    private SewageType sewageType;
 
     @Enumerated (EnumType.STRING)
     private GarbageDisposalType garbageDisposal;
@@ -47,5 +55,4 @@ public class Residence {
     private Boolean animals;
     private Integer familyCount;
     private BigDecimal familyIncome;
-
 }
