@@ -3,64 +3,46 @@ package com.healthcare.api.service;
 import com.healthcare.api.dto.CitizenCreateDTO;
 import com.healthcare.api.dto.CitizenResponseDTO;
 import com.healthcare.api.entity.Citizen;
+import com.healthcare.api.mapper.CitizenMapper;
 import com.healthcare.api.repository.CitizenRepository;
+import jakarta.transaction.Transactional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class CitizenService {
 
     private final CitizenRepository repository;
+    private final CitizenMapper mapper;
+    private final CitizenLinkageService linkageService;
 
-    public CitizenService(CitizenRepository repository) {
+    public CitizenService(CitizenRepository repository,
+                          CitizenMapper mapper,
+                          CitizenLinkageService linkageService) {
         this.repository = repository;
+        this.mapper = mapper;
+        this.linkageService = linkageService;
     }
 
-    public CitizenResponseDTO create (CitizenCreateDTO dto){
-        if (repository.existsByCpf((dto.cpf()))) {
+    public CitizenResponseDTO create(CitizenCreateDTO dto) {
+
+        if (repository.existsByCpf(dto.cpf())) {
             throw new RuntimeException("CPF already exists");
         }
 
-        Citizen citizen = toEntity(dto);
+        // 1. cria entity
+        Citizen citizen = mapper.toEntity(dto);
 
+        // 2. salva primeiro (AGORA ENTITY É GERENCIADA)
         Citizen saved = repository.save(citizen);
 
-        return new CitizenResponseDTO(
-                saved.getId(),
-                saved.getName(),
-                saved.getCpf(),
-                saved.getCns(),
-                saved.getGender(),
-                saved.getEducationLevel(),
-                saved.getRace(),
-                saved.getBirthDate(),
-                saved.getPhone(),
-                saved.getDiabetes(),
-                saved.getSmoker(),
-                saved.getAlcoholUse(),
-                saved.getHeartDisease(),
-                saved.getPregnant(),
-                saved.getRespiratoryDisease()
-        );
-    }
+        // 3. resolve vínculo
+        linkageService.resolve(saved);
 
-    private static @NonNull Citizen toEntity(CitizenCreateDTO dto) {
-        Citizen citizen = new Citizen();
+        // 4. força persistência do vínculo (ESSENCIAL)
+        Citizen updated = repository.save(saved);
 
-        citizen.setName(dto.name());
-        citizen.setCpf(dto.cpf());
-        citizen.setCns(dto.cns());
-        citizen.setGender(dto.gender());
-        citizen.setEducationLevel(dto.educationLevel());
-        citizen.setRace(dto.race());
-        citizen.setBirthDate(dto.birthDate());
-        citizen.setPhone(dto.phone());
-        citizen.setDiabetes(dto.diabetes());
-        citizen.setSmoker(dto.smoker());
-        citizen.setAlcoholUse(dto.alcoholUse());
-        citizen.setHeartDisease(dto.heartDisease());
-        citizen.setPregnant(dto.pregnant());
-        citizen.setRespiratoryDisease(dto.respiratoryDisease());
-        return citizen;
+        return mapper.toDTO(updated);
     }
 }

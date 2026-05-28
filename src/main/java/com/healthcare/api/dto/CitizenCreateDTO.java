@@ -25,6 +25,9 @@ public record CitizenCreateDTO(
         EducationLevel educationLevel,
         @NotNull
         Race race,
+        Integer microArea,
+
+        String cpfResponsibleFamily,
 
         String phone,
 
