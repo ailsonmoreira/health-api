@@ -14,8 +14,9 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "citizens")
 @Entity
-public class Person {
+public class Citizen {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)

@@ -1,10 +1,10 @@
 package com.healthcare.api.repository;
 
-import com.healthcare.api.entity.Person;
+import com.healthcare.api.entity.Citizen;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersonRepository extends JpaRepository<Person, Long> {
+public interface CitizenRepository extends JpaRepository<Citizen, Long> {
     boolean existsByCpf(String cpf);
 }

@@ -3,21 +3,28 @@ package com.healthcare.api.dto;
 import com.healthcare.api.enums.EducationLevel;
 import com.healthcare.api.enums.Gender;
 import com.healthcare.api.enums.Race;
-import org.springframework.cglib.core.Local;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
-public record PersonResponseDTO(
+public record CitizenCreateDTO(
 
-        Long id,
+        @NotBlank
         String name,
+        @CPF
         String cpf,
+        @NotBlank
         String cns,
-
-        Gender gender,
-        EducationLevel educationLevel,
-        Race race,
+        @NotNull
         LocalDate birthDate,
+        @NotNull
+        Gender gender,
+        @NotNull
+        EducationLevel educationLevel,
+        @NotNull
+        Race race,
 
         String phone,
 
@@ -27,5 +34,5 @@ public record PersonResponseDTO(
         Boolean heartDisease,
         Boolean pregnant,
         Boolean respiratoryDisease
-) {
-}
+
+) {}

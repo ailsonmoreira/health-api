@@ -2,6 +2,7 @@ package com.healthcare.api.entity;
 
 import com.healthcare.api.enums.*;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,8 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "residences")
 @Entity
 public class Residence {
     @Id

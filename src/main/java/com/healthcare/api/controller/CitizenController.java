@@ -1,8 +1,8 @@
 package com.healthcare.api.controller;
 
-import com.healthcare.api.dto.PersonCreateDTO;
-import com.healthcare.api.dto.PersonResponseDTO;
-import com.healthcare.api.service.PersonService;
+import com.healthcare.api.dto.CitizenCreateDTO;
+import com.healthcare.api.dto.CitizenResponseDTO;
+import com.healthcare.api.service.CitizenService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/persons")
-public class PersonController {
+@RequestMapping("/citizens")
+public class CitizenController {
 
-    private final PersonService service;
+    private final CitizenService service;
 
-    public PersonController(PersonService service) {
+    public CitizenController(CitizenService service) {
         this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<PersonResponseDTO> create(
-            @Valid @RequestBody PersonCreateDTO dto) {
+    public ResponseEntity<CitizenResponseDTO> create(
+            @Valid @RequestBody CitizenCreateDTO dto) {
 
-        PersonResponseDTO response = service.create(dto);
+        CitizenResponseDTO response = service.create(dto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
