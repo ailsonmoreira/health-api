@@ -6,7 +6,6 @@ import com.healthcare.api.entity.Citizen;
 import com.healthcare.api.mapper.CitizenMapper;
 import com.healthcare.api.repository.CitizenRepository;
 import jakarta.transaction.Transactional;
-import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 @Service
