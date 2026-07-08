@@ -42,6 +42,7 @@ public class ResidenceMapper {
                 r.getLocationZone(),
                 r.getHousingSituation(),
                 r.getHousingType(),
+                r.getMicroArea(),
 
                 r.getResidentCount(),
                 r.getRoomCount(),

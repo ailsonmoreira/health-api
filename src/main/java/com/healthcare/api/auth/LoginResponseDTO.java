@@ -1,4 +1,4 @@
-package com.healthcare.api.dto;
+package com.healthcare.api.auth;
 
 public record LoginResponseDTO(
         String token

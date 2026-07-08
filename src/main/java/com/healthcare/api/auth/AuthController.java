@@ -1,7 +1,5 @@
 package com.healthcare.api.auth;
 
-import com.healthcare.api.dto.LoginRequestDTO;
-import com.healthcare.api.dto.LoginResponseDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

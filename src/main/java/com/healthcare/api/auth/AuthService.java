@@ -1,15 +1,11 @@
 package com.healthcare.api.auth;
 
-import com.healthcare.api.dto.LoginRequestDTO;
-import com.healthcare.api.dto.LoginResponseDTO;
 import com.healthcare.api.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 @Service
 public class AuthService {
@@ -33,6 +29,7 @@ public class AuthService {
 
         UserDetails userDetails =
                 (UserDetails) authentication.getPrincipal();
+        assert userDetails != null;
         String token =
                 jwtService.generateToken(userDetails);
 

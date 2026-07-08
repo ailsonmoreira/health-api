@@ -11,6 +11,7 @@ public record ResidenceResponseDTO(
         LocationZone locationZone,
         HousingSituation housingSituation,
         HousingType housingType,
+        Integer microArea,
 
         Integer residentCount,
         Integer roomCount,

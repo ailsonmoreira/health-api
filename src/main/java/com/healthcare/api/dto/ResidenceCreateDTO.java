@@ -5,9 +5,11 @@ import com.healthcare.api.enums.*;
 import java.math.BigDecimal;
 
 public record ResidenceCreateDTO(
+
         LocationZone locationZone,
         HousingSituation housingSituation,
         HousingType housingType,
+        Integer microArea,
 
         Integer residentCount,
         Integer roomCount,
