@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "citizens")
 @Entity
 public class Citizen {
@@ -22,6 +21,7 @@ public class Citizen {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     @Column (nullable = false, unique = true, length = 11)
@@ -29,6 +29,7 @@ public class Citizen {
 
     @Column (unique = true)
     private String cns;
+
 
     private LocalDate birthDate;
 
@@ -48,4 +49,16 @@ public class Citizen {
     private Boolean heartDisease;
     private Boolean pregnant;
     private Boolean respiratoryDisease;
+    private Integer microArea;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "family_responsible_id")
+    private Citizen familyResponsible;
+
+    private String cpfResponsibleFamily;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "residence_id")
+    private Residence residence;
+
 }

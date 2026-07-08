@@ -58,4 +58,10 @@ public class Residence {
     private Boolean animals;
     private Integer familyCount;
     private BigDecimal familyIncome;
+
+    private String cpfResponsible;
+
+    @ManyToOne
+    @JoinColumn(name = "responsible_id")
+    private Citizen responsible;
 }

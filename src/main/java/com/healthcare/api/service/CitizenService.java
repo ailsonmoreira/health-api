@@ -3,64 +3,87 @@ package com.healthcare.api.service;
 import com.healthcare.api.dto.CitizenCreateDTO;
 import com.healthcare.api.dto.CitizenResponseDTO;
 import com.healthcare.api.entity.Citizen;
+import com.healthcare.api.entity.User;
+import com.healthcare.api.enums.Role;
+import com.healthcare.api.mapper.CitizenMapper;
 import com.healthcare.api.repository.CitizenRepository;
-import org.jspecify.annotations.NonNull;
+import com.healthcare.api.repository.ResidenceRepository;
+import com.healthcare.api.security.AuthenticatedUserService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 @Service
+@Transactional
 public class CitizenService {
 
     private final CitizenRepository repository;
+    private final CitizenMapper mapper;
+    private final CitizenLinkageService linkageService;
+    private final AuthenticatedUserService authenticatedUserService;
+    private final ResidenceRepository residenceRepository;
 
-    public CitizenService(CitizenRepository repository) {
+    public CitizenService(CitizenRepository repository,
+                          CitizenMapper mapper,
+                          CitizenLinkageService linkageService,
+                          AuthenticatedUserService authenticatedUserService,
+                          ResidenceRepository residenceRepository) {
         this.repository = repository;
+        this.mapper = mapper;
+        this.linkageService = linkageService;
+        this.authenticatedUserService = authenticatedUserService;
+        this.residenceRepository = residenceRepository;
     }
 
-    public CitizenResponseDTO create (CitizenCreateDTO dto){
-        if (repository.existsByCpf((dto.cpf()))) {
+    public CitizenResponseDTO create(CitizenCreateDTO dto) {
+
+        if (repository.existsByCpf(dto.cpf())) {
             throw new RuntimeException("CPF already exists");
         }
 
-        Citizen citizen = toEntity(dto);
+        User loggedUser =
+                authenticatedUserService.getCurrentUser();
+
+        Citizen citizen = mapper.toEntity(dto);
+
+        //Verify if loggedUser is ADMIN or AGENT and save MicroArea according to the loggedUser's MicroArea.
+        //If an ADMIN is logged, it allows to define a MicroArea manually
+        if (loggedUser.getRole() == Role.ADMIN) {
+            citizen.setMicroArea(
+                    dto.microArea()
+            );
+        }
+        else {
+            citizen.setMicroArea(loggedUser.getMicroArea());
+        }
 
         Citizen saved = repository.save(citizen);
 
-        return new CitizenResponseDTO(
-                saved.getId(),
-                saved.getName(),
-                saved.getCpf(),
-                saved.getCns(),
-                saved.getGender(),
-                saved.getEducationLevel(),
-                saved.getRace(),
-                saved.getBirthDate(),
-                saved.getPhone(),
-                saved.getDiabetes(),
-                saved.getSmoker(),
-                saved.getAlcoholUse(),
-                saved.getHeartDisease(),
-                saved.getPregnant(),
-                saved.getRespiratoryDisease()
-        );
+        //It allows both residence and citizen to be saved asynchronously
+        //without one needing to exist before the other.
+        linkageService.resolve(saved);
+
+        Citizen updated = repository.save(saved);
+
+        return mapper.toDTO(updated);
     }
 
-    private static @NonNull Citizen toEntity(CitizenCreateDTO dto) {
-        Citizen citizen = new Citizen();
+    public Page<CitizenResponseDTO> findAll(Pageable pageable){
 
-        citizen.setName(dto.name());
-        citizen.setCpf(dto.cpf());
-        citizen.setCns(dto.cns());
-        citizen.setGender(dto.gender());
-        citizen.setEducationLevel(dto.educationLevel());
-        citizen.setRace(dto.race());
-        citizen.setBirthDate(dto.birthDate());
-        citizen.setPhone(dto.phone());
-        citizen.setDiabetes(dto.diabetes());
-        citizen.setSmoker(dto.smoker());
-        citizen.setAlcoholUse(dto.alcoholUse());
-        citizen.setHeartDisease(dto.heartDisease());
-        citizen.setPregnant(dto.pregnant());
-        citizen.setRespiratoryDisease(dto.respiratoryDisease());
-        return citizen;
+        User loggedUser =
+                authenticatedUserService.getCurrentUser();
+
+        Page<Citizen> citizens;
+
+        if (loggedUser.getRole() == Role.ADMIN) {
+            citizens = repository.findAll(pageable);
+        } else {
+            citizens = repository.findAllByMicroArea(loggedUser.getMicroArea(), pageable);
+        }
+
+        return citizens.map(mapper::toDTO);
+
     }
 }

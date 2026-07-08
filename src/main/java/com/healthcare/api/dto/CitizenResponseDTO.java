@@ -25,6 +25,14 @@ public record CitizenResponseDTO(
         Boolean alcoholUse,
         Boolean heartDisease,
         Boolean pregnant,
-        Boolean respiratoryDisease
+        Boolean respiratoryDisease,
+
+        Integer microArea,
+
+        Long residenceId,
+
+        String cpfResponsibleFamily,
+
+        Long familyResponsibleId
 ) {
 }

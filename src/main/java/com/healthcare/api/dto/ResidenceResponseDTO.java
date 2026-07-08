@@ -4,7 +4,9 @@ import com.healthcare.api.enums.*;
 
 import java.math.BigDecimal;
 
-public record ResidenceCreateDTO(
+public record ResidenceResponseDTO(
+
+        Long id,
 
         LocationZone locationZone,
         HousingSituation housingSituation,
@@ -24,6 +26,9 @@ public record ResidenceCreateDTO(
         Integer familyCount,
         BigDecimal familyIncome,
 
-        String cpfResponsible
+        String cpfResponsible,
+
+        Long responsibleId,
+        String responsibleName
 ) {
 }
